@@ -9,9 +9,12 @@ type (
 	}
 	// TorrentArguments specifies the TorrentCommand in more detail
 	TorrentArguments struct {
-		Fields       []string              `json:"fields,omitempty"`
-		Torrents     []Torrent             `json:"torrents,omitempty"`
-		Ids          []int                 `json:"ids,omitempty"`
+		Fields   []string  `json:"fields,omitempty"`
+		Torrents []Torrent `json:"torrents,omitempty"`
+		// Ids can also be an integer, but torrent IDs are not stable across Transmission restarts.
+		// So we should only pass hashes or the special string "recently-active".
+		// See https://github.com/transmission/transmission/blob/0fd35eb07032fb9a03dea23469f2d8e3abd43000/docs/rpc-spec.md#31-torrent-action-requests
+		Ids          string                `json:"ids,omitempty"`
 		DeleteData   bool                  `json:"delete-local-data,omitempty"`
 		DownloadDir  string                `json:"download-dir,omitempty"`
 		MetaInfo     string                `json:"metainfo,omitempty"`
@@ -49,7 +52,9 @@ type (
 		Peers              []Peer        `json:"peers"`
 		PeersConnected     int           `json:"peersConnected"`
 		PeersGettingFromUs int           `json:"peersGettingFromUs"`
+		PeersSendingToUs   int           `json:"peersSendingToUs"`
 		TotalSize          int           `json:"totalSize"`
+		DownloadEver       int           `json:"downloadedEver"`
 		UploadedEver       int           `json:"uploadedEver"`
 	}
 

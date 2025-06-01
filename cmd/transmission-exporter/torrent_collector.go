@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 	"strconv"
+	"sync"
 
-	transmission "github.com/metalmatze/transmission-exporter"
+	"github.com/metalmatze/transmission-exporter"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -26,13 +27,20 @@ type TorrentCollector struct {
 	Upload             *prometheus.Desc
 	PeersConnected     *prometheus.Desc
 	PeersGettingFromUs *prometheus.Desc
+	PeersSendingToUs   *prometheus.Desc
 	TotalSize          *prometheus.Desc
+	DownloadEver       *prometheus.Desc
 	UploadedEver       *prometheus.Desc
 
 	// TrackerStats
 	Downloads *prometheus.Desc
 	Leechers  *prometheus.Desc
 	Seeders   *prometheus.Desc
+
+	// Cache
+	recentlyActiveOnly bool
+	cachedTorrents     map[string]transmission.Torrent
+	cachedTorrentsLock sync.Mutex
 }
 
 // NewTorrentCollector creates a new torrent collector with the transmission.Client
@@ -40,7 +48,8 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 	const collectorNamespace = "torrent_"
 
 	return &TorrentCollector{
-		client: client,
+		client:         client,
+		cachedTorrents: make(map[string]transmission.Torrent),
 
 		Status: prometheus.NewDesc(
 			namespace+collectorNamespace+"status",
@@ -102,9 +111,21 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 			[]string{"id", "name"},
 			nil,
 		),
+		PeersSendingToUs: prometheus.NewDesc(
+			namespace+collectorNamespace+"peers_sending_to_us",
+			"The current number of peers sending to us",
+			[]string{"id", "name"},
+			nil,
+		),
 		TotalSize: prometheus.NewDesc(
 			namespace+collectorNamespace+"total_size",
 			"The total size of the torrent",
+			[]string{"id", "name"},
+			nil,
+		),
+		DownloadEver: prometheus.NewDesc(
+			namespace+collectorNamespace+"downloaded_ever",
+			"The total downloaded of the torrent",
 			[]string{"id", "name"},
 			nil,
 		),
@@ -152,19 +173,35 @@ func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- tc.Seeders
 	ch <- tc.PeersConnected
 	ch <- tc.PeersGettingFromUs
+	ch <- tc.PeersSendingToUs
 	ch <- tc.TotalSize
+	ch <- tc.DownloadEver
 	ch <- tc.UploadedEver
 }
 
 // Collect implements the prometheus.Collector interface
 func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
-	torrents, err := tc.client.GetTorrents()
+	torrents, err := tc.client.GetTorrents(tc.recentlyActiveOnly)
 	if err != nil {
 		log.Printf("failed to get torrents: %v", err)
 		return
 	}
 
+	tc.cachedTorrentsLock.Lock()
+	var torrentsToUpdate []transmission.Torrent
 	for _, t := range torrents {
+		tc.cachedTorrents[t.HashString] = t
+	}
+	for _, t := range tc.cachedTorrents {
+		torrentsToUpdate = append(torrentsToUpdate, t)
+	}
+	tc.cachedTorrentsLock.Unlock()
+
+	if len(torrentsToUpdate) > 0 {
+		tc.recentlyActiveOnly = true // only do this if successful
+	}
+
+	for _, t := range torrentsToUpdate {
 		var finished float64
 
 		id := strconv.Itoa(t.ID)
@@ -234,9 +271,21 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			id, t.Name,
 		)
 		ch <- prometheus.MustNewConstMetric(
+			tc.PeersSendingToUs,
+			prometheus.GaugeValue,
+			float64(t.PeersSendingToUs),
+			id, t.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
 			tc.TotalSize,
 			prometheus.GaugeValue,
 			float64(t.TotalSize),
+			id, t.Name,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.DownloadEver,
+			prometheus.GaugeValue,
+			float64(t.DownloadEver),
 			id, t.Name,
 		)
 		ch <- prometheus.MustNewConstMetric(
