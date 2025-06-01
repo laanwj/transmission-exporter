@@ -225,7 +225,7 @@
             "refId": "A"
           }
         ],
-        "title": "Current upload",
+        "title": "Current session upload",
         "type": "stat"
       },
       {
@@ -590,7 +590,7 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 2,
+          "w": 3,
           "x": 0,
           "y": 4
         },
@@ -626,7 +626,7 @@
             "refId": "A"
           }
         ],
-        "title": "Current ratio",
+        "title": "Current session ratio",
         "type": "stat"
       },
       {
@@ -667,8 +667,8 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 3,
-          "x": 2,
+          "w": 2,
+          "x": 3,
           "y": 4
         },
         "id": 11,
@@ -703,7 +703,7 @@
             "refId": "A"
           }
         ],
-        "title": "Cumulative ratio",
+        "title": "Overall ratio",
         "type": "stat"
       },
       {
@@ -785,7 +785,7 @@
             "refId": "A"
           }
         ],
-        "title": "Current download",
+        "title": "Current session download",
         "type": "stat"
       },
       {
@@ -1843,7 +1843,7 @@
             "refId": "M"
           }
         ],
-        "title": "Torrents stats",
+        "title": "Torrent stats",
         "transformations": [
           {
             "id": "joinByField",
