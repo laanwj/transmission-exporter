@@ -135,7 +135,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "count(transmission_torrent_done)",
+            "expr": "count(transmission_torrent_done{instance=~\"$instance\",job=~\"$job\"})",
             "format": "time_series",
             "instant": true,
             "intervalFactor": 1,
@@ -187,7 +187,7 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 2,
+          "w": 3,
           "x": 5,
           "y": 0
         },
@@ -218,7 +218,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "transmission_session_stats_uploaded_bytes{type=\"current\"}",
+            "expr": "transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"current\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "range": true,
@@ -270,7 +270,7 @@
         "gridPos": {
           "h": 4,
           "w": 3,
-          "x": 7,
+          "x": 8,
           "y": 0
         },
         "id": 22,
@@ -300,7 +300,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum (increase(transmission_session_stats_uploaded_bytes{type=\"cumulative\"}[1d]))",
+            "expr": "sum (increase(transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[1d]))",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "__auto",
@@ -353,7 +353,7 @@
         "gridPos": {
           "h": 4,
           "w": 3,
-          "x": 10,
+          "x": 11,
           "y": 0
         },
         "id": 23,
@@ -383,7 +383,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum (increase(transmission_session_stats_uploaded_bytes{type=\"cumulative\"}[7d]))",
+            "expr": "sum (increase(transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[7d]))",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "__auto",
@@ -436,7 +436,7 @@
         "gridPos": {
           "h": 4,
           "w": 5,
-          "x": 13,
+          "x": 14,
           "y": 0
         },
         "id": 5,
@@ -466,7 +466,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "transmission_session_stats_uploaded_bytes{type=\"cumulative\"}",
+            "expr": "transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "range": true,
@@ -508,8 +508,8 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 6,
-          "x": 18,
+          "w": 5,
+          "x": 19,
           "y": 0
         },
         "id": 18,
@@ -539,7 +539,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum (transmission_torrent_upload_bytes{name=~\"$Torrent\"})",
+            "expr": "sum (transmission_torrent_upload_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
             "instant": false,
             "legendFormat": "__auto",
             "range": true,
@@ -620,7 +620,7 @@
               "type": "prometheus",
               "uid": "${DS_PROMETHEUS}"
             },
-            "expr": "transmission_session_stats_uploaded_bytes{type=\"current\"}/transmission_session_stats_downloaded_bytes{type=\"current\"}",
+            "expr": "transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"current\"}/transmission_session_stats_downloaded_bytes{type=instance=~\"$instance\",job=~\"$job\",\"current\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "refId": "A"
@@ -697,7 +697,7 @@
               "type": "prometheus",
               "uid": "${DS_PROMETHEUS}"
             },
-            "expr": "transmission_session_stats_uploaded_bytes{type=\"cumulative\"}/transmission_session_stats_downloaded_bytes{type=\"cumulative\"}",
+            "expr": "transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}/transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "refId": "A"
@@ -747,7 +747,7 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 2,
+          "w": 3,
           "x": 5,
           "y": 4
         },
@@ -778,7 +778,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "transmission_session_stats_downloaded_bytes{type=\"current\"}",
+            "expr": "transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"current\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "range": true,
@@ -830,7 +830,7 @@
         "gridPos": {
           "h": 4,
           "w": 3,
-          "x": 7,
+          "x": 8,
           "y": 4
         },
         "id": 24,
@@ -860,7 +860,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum (increase(transmission_session_stats_downloaded_bytes{type=\"cumulative\"}[1d]))",
+            "expr": "sum (increase(transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[1d]))",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "__auto",
@@ -914,7 +914,7 @@
         "gridPos": {
           "h": 4,
           "w": 3,
-          "x": 10,
+          "x": 11,
           "y": 4
         },
         "id": 25,
@@ -944,7 +944,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum (increase(transmission_session_stats_downloaded_bytes{type=\"cumulative\"}[7d]))",
+            "expr": "sum (increase(transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[7d]))",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "__auto",
@@ -997,7 +997,7 @@
         "gridPos": {
           "h": 4,
           "w": 5,
-          "x": 13,
+          "x": 14,
           "y": 4
         },
         "id": 4,
@@ -1026,7 +1026,7 @@
               "type": "prometheus",
               "uid": "${DS_PROMETHEUS}"
             },
-            "expr": "transmission_session_stats_downloaded_bytes{type=\"cumulative\"}",
+            "expr": "transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}",
             "format": "time_series",
             "intervalFactor": 1,
             "refId": "A"
@@ -1067,8 +1067,8 @@
         },
         "gridPos": {
           "h": 4,
-          "w": 6,
-          "x": 18,
+          "w": 5,
+          "x": 19,
           "y": 4
         },
         "id": 21,
@@ -1098,7 +1098,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum (transmission_torrent_download_bytes{name=~\"$Torrent\"})",
+            "expr": "sum (transmission_torrent_download_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
             "instant": false,
             "legendFormat": "__auto",
             "range": true,
@@ -1200,7 +1200,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "transmission_torrent_upload_bytes{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_upload_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "instant": false,
             "legendFormat": "{{name}}",
             "range": true,
@@ -1269,6 +1269,10 @@
                 },
                 {
                   "id": "color"
+                },
+                {
+                  "id": "custom.align",
+                  "value": "left"
                 }
               ]
             },
@@ -1605,7 +1609,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "avg_over_time (transmission_torrent_upload_bytes{name=~\"$Torrent\"}[30d])",
+            "expr": "avg_over_time (transmission_torrent_upload_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}[30d])",
             "format": "table",
             "instant": true,
             "legendFormat": "{{name}}",
@@ -1619,7 +1623,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_ratio{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_ratio{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1634,7 +1638,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_files_total{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_files_total{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1649,7 +1653,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "avg_over_time (transmission_torrent_seeders{name=~\"$Torrent\"}[30d])",
+            "expr": "avg_over_time (transmission_torrent_seeders{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}[30d])",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1664,7 +1668,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "avg_over_time (transmission_torrent_leechers{name=~\"$Torrent\"}[30d])",
+            "expr": "avg_over_time (transmission_torrent_leechers{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}[30d])",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1679,7 +1683,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_added{name=~\"$Torrent\"} * 1000",
+            "expr": "transmission_torrent_added{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"} * 1000",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1694,7 +1698,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_downloads_total{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_downloads_total{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1709,7 +1713,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_upload_bytes{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_upload_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1724,7 +1728,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "avg_over_time (transmission_torrent_upload_bytes{name=~\"$Torrent\"}[1d])",
+            "expr": "avg_over_time (transmission_torrent_upload_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}[1d])",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1739,7 +1743,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_peers_connected{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_peers_connected{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1754,7 +1758,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_peers_getting_from_us{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_peers_getting_from_us{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1769,7 +1773,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_total_size{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_total_size{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -1784,7 +1788,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "transmission_torrent_uploaded_ever{name=~\"$Torrent\"}",
+            "expr": "transmission_torrent_uploaded_ever{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"}",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -2042,6 +2046,48 @@
     ],
     "templating": {
       "list": [
+        {
+          "current": {},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "definition": "label_values(transmission_version,instance)",
+          "includeAll": true,
+          "label": "Transmission Instance",
+          "name": "instance",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(transmission_version,instance)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+        },
+        {
+          "current": {},
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "definition": "label_values(transmission_version,job)",
+          "includeAll": true,
+          "label": "Job",
+          "name": "job",
+          "options": [],
+          "query": {
+            "qryType": 1,
+            "query": "label_values(transmission_version,job)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "sort": 1,
+          "type": "query"
+          },
         {
           "current": {},
           "datasource": {
