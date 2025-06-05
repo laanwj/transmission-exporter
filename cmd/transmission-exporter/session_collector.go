@@ -132,13 +132,13 @@ func (sc *SessionCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(
 		sc.AltSpeedDown,
 		prometheus.GaugeValue,
-		float64(session.AltSpeedDown),
+		session.AltSpeedDown,
 		boolToString(session.AltSpeedEnabled),
 	)
 	ch <- prometheus.MustNewConstMetric(
 		sc.AltSpeedUp,
 		prometheus.GaugeValue,
-		float64(session.AltSpeedUp),
+		session.AltSpeedUp,
 		boolToString(session.AltSpeedEnabled),
 	)
 	ch <- prometheus.MustNewConstMetric(
@@ -177,19 +177,19 @@ func (sc *SessionCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(
 		sc.SeedRatioLimit,
 		prometheus.GaugeValue,
-		float64(session.SeedRatioLimit),
+		session.SeedRatioLimit,
 		boolToString(session.SeedRatioLimited),
 	)
 	ch <- prometheus.MustNewConstMetric(
 		sc.SpeedLimitDown,
 		prometheus.GaugeValue,
-		float64(session.SpeedLimitDown),
+		session.SpeedLimitDown,
 		boolToString(session.SpeedLimitDownEnabled),
 	)
 	ch <- prometheus.MustNewConstMetric(
 		sc.SpeedLimitUp,
 		prometheus.GaugeValue,
-		float64(session.SpeedLimitUp),
+		session.SpeedLimitUp,
 		boolToString(session.SpeedLimitUpEnabled),
 	)
 	ch <- prometheus.MustNewConstMetric(
