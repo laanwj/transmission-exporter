@@ -56,7 +56,7 @@
         "uid": "grafana"
       },
       "gridPos": {
-        "h": 3,
+        "h": 2,
         "w": 24,
         "x": 0,
         "y": 0
@@ -81,7 +81,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 3
+        "y": 2
       },
       "id": 27,
       "title": "Session Overview",
@@ -126,7 +126,7 @@
         "h": 4,
         "w": 5,
         "x": 0,
-        "y": 4
+        "y": 3
       },
       "id": 13,
       "maxDataPoints": 100,
@@ -210,7 +210,7 @@
         "h": 4,
         "w": 3,
         "x": 5,
-        "y": 4
+        "y": 3
       },
       "id": 6,
       "maxDataPoints": 100,
@@ -292,7 +292,7 @@
         "h": 4,
         "w": 3,
         "x": 8,
-        "y": 4
+        "y": 3
       },
       "id": 22,
       "maxDataPoints": 100,
@@ -375,7 +375,7 @@
         "h": 4,
         "w": 3,
         "x": 11,
-        "y": 4
+        "y": 3
       },
       "id": 23,
       "maxDataPoints": 100,
@@ -458,7 +458,7 @@
         "h": 4,
         "w": 5,
         "x": 14,
-        "y": 4
+        "y": 3
       },
       "id": 5,
       "maxDataPoints": 100,
@@ -531,7 +531,7 @@
         "h": 4,
         "w": 5,
         "x": 19,
-        "y": 4
+        "y": 3
       },
       "id": 18,
       "options": {
@@ -604,7 +604,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "noValue": "0"
         },
         "overrides": []
       },
@@ -612,7 +613,7 @@
         "h": 2,
         "w": 5,
         "x": 0,
-        "y": 8
+        "y": 7
       },
       "id": 40,
       "options": {
@@ -678,7 +679,7 @@
         "h": 2,
         "w": 5,
         "x": 5,
-        "y": 8
+        "y": 7
       },
       "id": 41,
       "options": {
@@ -748,7 +749,7 @@
         "h": 2,
         "w": 5,
         "x": 10,
-        "y": 8
+        "y": 7
       },
       "id": 42,
       "options": {
@@ -828,7 +829,7 @@
         "h": 4,
         "w": 3,
         "x": 0,
-        "y": 10
+        "y": 9
       },
       "id": 10,
       "maxDataPoints": 100,
@@ -907,7 +908,7 @@
         "h": 4,
         "w": 2,
         "x": 3,
-        "y": 10
+        "y": 9
       },
       "id": 11,
       "maxDataPoints": 100,
@@ -986,7 +987,7 @@
         "h": 4,
         "w": 3,
         "x": 5,
-        "y": 10
+        "y": 9
       },
       "id": 3,
       "maxDataPoints": 100,
@@ -1068,7 +1069,7 @@
         "h": 4,
         "w": 3,
         "x": 8,
-        "y": 10
+        "y": 9
       },
       "id": 24,
       "maxDataPoints": 100,
@@ -1152,7 +1153,7 @@
         "h": 4,
         "w": 3,
         "x": 11,
-        "y": 10
+        "y": 9
       },
       "id": 25,
       "maxDataPoints": 100,
@@ -1234,7 +1235,7 @@
         "h": 4,
         "w": 5,
         "x": 14,
-        "y": 10
+        "y": 9
       },
       "id": 4,
       "maxDataPoints": 100,
@@ -1305,7 +1306,7 @@
         "h": 4,
         "w": 5,
         "x": 19,
-        "y": 10
+        "y": 9
       },
       "id": 21,
       "options": {
@@ -1408,7 +1409,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 13
       },
       "id": 14,
       "options": {
@@ -1955,7 +1956,7 @@
         "h": 22,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 22
       },
       "id": 15,
       "options": {
@@ -2471,7 +2472,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 44
       },
       "id": 28,
       "panels": [
@@ -2870,7 +2871,7 @@
             "h": 22,
             "w": 24,
             "x": 0,
-            "y": 46
+            "y": 45
           },
           "id": 26,
           "options": {
@@ -3350,7 +3351,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 45
       },
       "id": 30,
       "panels": [
@@ -3558,7 +3559,7 @@
             "h": 16,
             "w": 24,
             "x": 0,
-            "y": 47
+            "y": 46
           },
           "id": 35,
           "options": {
@@ -3852,7 +3853,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 63
+            "y": 62
           },
           "id": 36,
           "options": {
@@ -3954,7 +3955,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 63
+            "y": 62
           },
           "id": 37,
           "options": {
@@ -4013,7 +4014,8 @@
               },
               "unit": "percentunit",
               "min": 0,
-              "max": 1
+              "max": 1,
+              "noValue": "All torrents complete!"
             },
             "overrides": []
           },
@@ -4021,7 +4023,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 72
+            "y": 71
           },
           "id": 38,
           "options": {
@@ -4154,7 +4156,7 @@
     {
       "name": "DS_PROMETHEUS",
       "label": "Prometheus",
-      "description": "Prometheus-compatible datasource (Prometheus, VictoriaMetrics, Thanos, etc.)",
+      "description": "Prometheus-compatible datasource",
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
