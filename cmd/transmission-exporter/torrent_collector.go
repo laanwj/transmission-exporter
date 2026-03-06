@@ -54,85 +54,85 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 		Status: prometheus.NewDesc(
 			namespace+collectorNamespace+"status",
 			"Status of a torrent",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Added: prometheus.NewDesc(
 			namespace+collectorNamespace+"added",
 			"The unixtime time a torrent was added",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Files: prometheus.NewDesc(
 			namespace+collectorNamespace+"files_total",
 			"The total number of files in a torrent",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Finished: prometheus.NewDesc(
 			namespace+collectorNamespace+"finished",
 			"Indicates if a torrent is finished (1) or not (0)",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Done: prometheus.NewDesc(
 			namespace+collectorNamespace+"done",
 			"The percent of a torrent being done",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Ratio: prometheus.NewDesc(
 			namespace+collectorNamespace+"ratio",
 			"The upload ratio of a torrent",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Download: prometheus.NewDesc(
 			namespace+collectorNamespace+"download_bytes",
 			"The current download rate of a torrent in bytes",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		Upload: prometheus.NewDesc(
 			namespace+collectorNamespace+"upload_bytes",
 			"The current upload rate of a torrent in bytes",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		PeersConnected: prometheus.NewDesc(
 			namespace+collectorNamespace+"peers_connected",
 			"The current number of peers connected to us",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		PeersGettingFromUs: prometheus.NewDesc(
 			namespace+collectorNamespace+"peers_getting_from_us",
 			"The current number of peers downloading from us",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		PeersSendingToUs: prometheus.NewDesc(
 			namespace+collectorNamespace+"peers_sending_to_us",
 			"The current number of peers sending to us",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		TotalSize: prometheus.NewDesc(
 			namespace+collectorNamespace+"total_size",
 			"The total size of the torrent",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		DownloadEver: prometheus.NewDesc(
 			namespace+collectorNamespace+"downloaded_ever",
 			"The total downloaded of the torrent",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 		UploadedEver: prometheus.NewDesc(
 			namespace+collectorNamespace+"uploaded_ever",
 			"The total uploaded of the torrent",
-			[]string{"id", "name"},
+			[]string{"id", "name", "tracker"},
 			nil,
 		),
 
@@ -215,89 +215,101 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			finished = 1
 		}
 
+		// Use the first non-backup tracker as the primary tracker label
+		tracker := ""
+		for _, ts := range t.TrackerStats {
+			if !ts.IsBackup {
+				tracker = ts.Host
+				break
+			}
+		}
+		if tracker == "" && len(t.TrackerStats) > 0 {
+			tracker = t.TrackerStats[0].Host
+		}
+
 		ch <- prometheus.MustNewConstMetric(
 			tc.Status,
 			prometheus.GaugeValue,
 			float64(t.Status),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Added,
 			prometheus.GaugeValue,
 			float64(t.Added),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Files,
 			prometheus.GaugeValue,
 			float64(len(t.Files)),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Finished,
 			prometheus.GaugeValue,
 			finished,
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Done,
 			prometheus.GaugeValue,
 			t.PercentDone,
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Ratio,
 			prometheus.GaugeValue,
 			t.UploadRatio,
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Download,
 			prometheus.GaugeValue,
 			float64(t.RateDownload),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.Upload,
 			prometheus.GaugeValue,
 			float64(t.RateUpload),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.PeersConnected,
 			prometheus.GaugeValue,
 			float64(t.PeersConnected),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.PeersGettingFromUs,
 			prometheus.GaugeValue,
 			float64(t.PeersGettingFromUs),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.PeersSendingToUs,
 			prometheus.GaugeValue,
 			float64(t.PeersSendingToUs),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.TotalSize,
 			prometheus.GaugeValue,
 			float64(t.TotalSize),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.DownloadEver,
 			prometheus.GaugeValue,
 			float64(t.DownloadEver),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 		ch <- prometheus.MustNewConstMetric(
 			tc.UploadedEver,
 			prometheus.GaugeValue,
 			float64(t.UploadedEver),
-			id, t.Name,
+			id, t.Name, tracker,
 		)
 
 		tstats := make(map[string]transmission.TrackerStat)
