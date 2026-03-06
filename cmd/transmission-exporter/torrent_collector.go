@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/metalmatze/transmission-exporter"
 	"github.com/prometheus/client_golang/prometheus"
@@ -32,6 +33,18 @@ type TorrentCollector struct {
 	DownloadEver       *prometheus.Desc
 	UploadedEver       *prometheus.Desc
 
+	SizeWhenDone       *prometheus.Desc
+	CorruptEver        *prometheus.Desc
+	HaveValid          *prometheus.Desc
+	DesiredAvailable   *prometheus.Desc
+	SecondsDownloading *prometheus.Desc
+	SecondsSeeding     *prometheus.Desc
+	QueuePosition      *prometheus.Desc
+	ActivityDate       *prometheus.Desc
+	DoneDate           *prometheus.Desc
+	ErrorStatus        *prometheus.Desc
+	LeftUntilDone      *prometheus.Desc
+
 	// TrackerStats
 	Downloads *prometheus.Desc
 	Leechers  *prometheus.Desc
@@ -39,6 +52,7 @@ type TorrentCollector struct {
 
 	// Cache
 	recentlyActiveOnly bool
+	scrapeCount        int
 	cachedTorrents     map[string]transmission.Torrent
 	cachedTorrentsLock sync.Mutex
 }
@@ -135,6 +149,72 @@ func NewTorrentCollector(client *transmission.Client) *TorrentCollector {
 			[]string{"id", "name", "tracker"},
 			nil,
 		),
+		SizeWhenDone: prometheus.NewDesc(
+			namespace+collectorNamespace+"size_when_done_bytes",
+			"Final size of the torrent when download is complete",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		CorruptEver: prometheus.NewDesc(
+			namespace+collectorNamespace+"corrupt_ever_bytes",
+			"Total corrupt bytes received for the torrent",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		HaveValid: prometheus.NewDesc(
+			namespace+collectorNamespace+"have_valid_bytes",
+			"Total verified bytes of the torrent",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		DesiredAvailable: prometheus.NewDesc(
+			namespace+collectorNamespace+"desired_available_bytes",
+			"Bytes we still need that are available from peers",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		SecondsDownloading: prometheus.NewDesc(
+			namespace+collectorNamespace+"seconds_downloading",
+			"Total seconds spent downloading the torrent",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		SecondsSeeding: prometheus.NewDesc(
+			namespace+collectorNamespace+"seconds_seeding",
+			"Total seconds spent seeding the torrent",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		QueuePosition: prometheus.NewDesc(
+			namespace+collectorNamespace+"queue_position",
+			"Position of the torrent in the download/seed queue",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		ActivityDate: prometheus.NewDesc(
+			namespace+collectorNamespace+"activity_date",
+			"Unix timestamp of the torrent's last activity",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		DoneDate: prometheus.NewDesc(
+			namespace+collectorNamespace+"done_date",
+			"Unix timestamp when the torrent finished downloading",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		ErrorStatus: prometheus.NewDesc(
+			namespace+collectorNamespace+"error",
+			"Torrent error status (0=OK, 1=tracker_warning, 2=tracker_error, 3=local_error)",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
+		LeftUntilDone: prometheus.NewDesc(
+			namespace+collectorNamespace+"left_until_done_bytes",
+			"Bytes remaining to download",
+			[]string{"id", "name", "tracker"},
+			nil,
+		),
 
 		// TrackerStats
 		Downloads: prometheus.NewDesc(
@@ -177,34 +257,66 @@ func (tc *TorrentCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- tc.TotalSize
 	ch <- tc.DownloadEver
 	ch <- tc.UploadedEver
+	ch <- tc.SizeWhenDone
+	ch <- tc.CorruptEver
+	ch <- tc.HaveValid
+	ch <- tc.DesiredAvailable
+	ch <- tc.SecondsDownloading
+	ch <- tc.SecondsSeeding
+	ch <- tc.QueuePosition
+	ch <- tc.ActivityDate
+	ch <- tc.DoneDate
+	ch <- tc.ErrorStatus
+	ch <- tc.LeftUntilDone
 }
 
 // Collect implements the prometheus.Collector interface
 func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
-	torrents, err := tc.client.GetTorrents(tc.recentlyActiveOnly)
+	start := time.Now()
+
+	// Force a full refresh every 10 scrapes to prune removed torrents
+	tc.cachedTorrentsLock.Lock()
+	tc.scrapeCount++
+	if tc.scrapeCount%10 == 0 {
+		tc.recentlyActiveOnly = false
+	}
+	recentlyActiveOnly := tc.recentlyActiveOnly
+	tc.cachedTorrentsLock.Unlock()
+
+	torrents, err := tc.client.GetTorrents(recentlyActiveOnly)
 	if err != nil {
-		log.Printf("failed to get torrents: %v", err)
+		slog.Error("failed to get torrents", "error", err, "recently_active_only", tc.recentlyActiveOnly)
 		return
 	}
 
 	if torrents == nil {
-		log.Println("got nil torrents from transmission")
+		slog.Warn("got nil torrents from transmission")
 		return
 	}
 
 	tc.cachedTorrentsLock.Lock()
-	var torrentsToUpdate []transmission.Torrent
+	if !recentlyActiveOnly {
+		// Full fetch — replace the entire cache to prune removed torrents
+		tc.cachedTorrents = make(map[string]transmission.Torrent, len(torrents))
+	}
 	for _, t := range torrents {
 		tc.cachedTorrents[t.HashString] = t
 	}
+	torrentsToUpdate := make([]transmission.Torrent, 0, len(tc.cachedTorrents))
 	for _, t := range tc.cachedTorrents {
 		torrentsToUpdate = append(torrentsToUpdate, t)
 	}
+	if len(torrentsToUpdate) > 0 {
+		tc.recentlyActiveOnly = true
+	}
 	tc.cachedTorrentsLock.Unlock()
 
-	if len(torrentsToUpdate) > 0 {
-		tc.recentlyActiveOnly = true // only do this if successful
-	}
+	slog.Debug("collected torrents",
+		"count", len(torrentsToUpdate),
+		"fetched", len(torrents),
+		"cached", len(tc.cachedTorrents),
+		"duration", time.Since(start).String(),
+	)
 
 	for _, t := range torrentsToUpdate {
 		var finished float64
@@ -311,12 +423,79 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 			float64(t.UploadedEver),
 			id, t.Name, tracker,
 		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.SizeWhenDone,
+			prometheus.GaugeValue,
+			float64(t.SizeWhenDone),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.CorruptEver,
+			prometheus.GaugeValue,
+			float64(t.CorruptEver),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.HaveValid,
+			prometheus.GaugeValue,
+			float64(t.HaveValid),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.DesiredAvailable,
+			prometheus.GaugeValue,
+			float64(t.DesiredAvailable),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.SecondsDownloading,
+			prometheus.GaugeValue,
+			float64(t.SecondsDownloading),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.SecondsSeeding,
+			prometheus.GaugeValue,
+			float64(t.SecondsSeeding),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.QueuePosition,
+			prometheus.GaugeValue,
+			float64(t.QueuePosition),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.ActivityDate,
+			prometheus.GaugeValue,
+			float64(t.ActivityDate),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.DoneDate,
+			prometheus.GaugeValue,
+			float64(t.DoneDate),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.ErrorStatus,
+			prometheus.GaugeValue,
+			float64(t.Error),
+			id, t.Name, tracker,
+		)
+		ch <- prometheus.MustNewConstMetric(
+			tc.LeftUntilDone,
+			prometheus.GaugeValue,
+			float64(t.LeftUntilDone),
+			id, t.Name, tracker,
+		)
 
 		tstats := make(map[string]transmission.TrackerStat)
 
 		for _, tracker := range t.TrackerStats {
 			if tr, exists := tstats[tracker.Host]; exists {
 				tr.DownloadCount += tracker.DownloadCount
+				tstats[tracker.Host] = tr
 			} else {
 				tstats[tracker.Host] = tracker
 			}

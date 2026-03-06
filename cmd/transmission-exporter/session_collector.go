@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 
 	"github.com/metalmatze/transmission-exporter"
 	"github.com/prometheus/client_golang/prometheus"
@@ -125,12 +125,12 @@ func (sc *SessionCollector) Describe(ch chan<- *prometheus.Desc) {
 func (sc *SessionCollector) Collect(ch chan<- prometheus.Metric) {
 	session, err := sc.client.GetSession()
 	if err != nil {
-		log.Printf("failed to get session: %v", err)
+		slog.Error("failed to get session", "error", err)
 		return
 	}
 
 	if session == nil {
-		log.Println("got nil session from transmission")
+		slog.Warn("got nil session from transmission")
 		return
 	}
 

@@ -1,68 +1,69 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 
-	"github.com/alexflint/go-arg"
-	"github.com/joho/godotenv"
 	"github.com/metalmatze/transmission-exporter"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// Config gets its content from env and passes it on to different packages
-type Config struct {
-	TransmissionAddr     string `arg:"env:TRANSMISSION_ADDR"`
-	TransmissionPassword string `arg:"env:TRANSMISSION_PASSWORD"`
-	TransmissionUsername string `arg:"env:TRANSMISSION_USERNAME"`
-	WebAddr              string `arg:"env:WEB_ADDR"`
-	WebPath              string `arg:"env:WEB_PATH"`
+func env(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
 }
 
 func main() {
-	log.Println("starting transmission-exporter")
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("no .env present")
-	}
+	addr := env("TRANSMISSION_ADDR", "http://localhost:9091")
+	username := os.Getenv("TRANSMISSION_USERNAME")
+	password := os.Getenv("TRANSMISSION_PASSWORD")
+	webAddr := env("WEB_ADDR", ":19091")
+	webPath := env("WEB_PATH", "/metrics")
 
-	c := Config{
-		WebPath:          "/metrics",
-		WebAddr:          ":19091",
-		TransmissionAddr: "http://localhost:9091",
-	}
-
-	arg.MustParse(&c)
+	slog.Info("starting transmission-exporter",
+		"transmission_addr", addr,
+		"web_addr", webAddr,
+		"web_path", webPath,
+		"auth_enabled", username != "",
+	)
 
 	var user *transmission.User
-	if c.TransmissionUsername != "" && c.TransmissionPassword != "" {
+	if username != "" && password != "" {
 		user = &transmission.User{
-			Username: c.TransmissionUsername,
-			Password: c.TransmissionPassword,
+			Username: username,
+			Password: password,
 		}
 	}
 
-	client := transmission.New(c.TransmissionAddr, user)
+	client := transmission.New(addr, user)
 
 	prometheus.MustRegister(NewTorrentCollector(client))
 	prometheus.MustRegister(NewSessionCollector(client))
 	prometheus.MustRegister(NewSessionStatsCollector(client))
 
-	http.Handle(c.WebPath, promhttp.Handler())
+	http.Handle(webPath, promhttp.Handler())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
-			<head><title>Node Exporter</title></head>
+			<head><title>Transmission Exporter</title></head>
 			<body>
 			<h1>Transmission Exporter</h1>
-			<p><a href="` + c.WebPath + `">Metrics</a></p>
+			<p><a href="` + webPath + `">Metrics</a></p>
 			</body>
 			</html>`))
 	})
 
-	log.Fatal(http.ListenAndServe(c.WebAddr, nil))
+	slog.Info("listening", "addr", webAddr)
+	if err := http.ListenAndServe(webAddr, nil); err != nil {
+		slog.Error("server failed", "error", err)
+		os.Exit(1)
+	}
 }
 
 func boolToString(true bool) string {

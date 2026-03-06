@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -52,6 +52,7 @@ func (c *Client) post(body []byte) ([]byte, error) {
 	}
 
 	if res.StatusCode == http.StatusConflict {
+		res.Body.Close()
 		c.getToken()
 		authRequest, err := c.authRequest("POST", body)
 		if err != nil {
@@ -61,9 +62,10 @@ func (c *Client) post(body []byte) ([]byte, error) {
 		if err != nil {
 			return make([]byte, 0), err
 		}
+		defer res.Body.Close()
 	}
 
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return make([]byte, 0), err
 	}
@@ -120,6 +122,8 @@ func (c *Client) GetTorrents(recentlyActiveOnly bool) ([]Torrent, error) {
 				"hashString",
 				"status",
 				"addedDate",
+				"activityDate",
+				"doneDate",
 				"leftUntilDone",
 				"eta",
 				"uploadRatio",
@@ -140,8 +144,17 @@ func (c *Client) GetTorrents(recentlyActiveOnly bool) ([]Torrent, error) {
 				"peersGettingFromUs",
 				"peersSendingToUs",
 				"totalSize",
+				"sizeWhenDone",
 				"downloadedEver",
 				"uploadedEver",
+				"corruptEver",
+				"haveValid",
+				"desiredAvailable",
+				"secondsDownloading",
+				"secondsSeeding",
+				"queuePosition",
+				"pieceCount",
+				"pieceSize",
 			},
 		},
 	}

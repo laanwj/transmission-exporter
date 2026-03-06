@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"time"
 
 	"github.com/metalmatze/transmission-exporter"
@@ -103,18 +103,23 @@ func (sc *SessionStatsCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- sc.TorrentsTotal
 	ch <- sc.TorrentsActive
 	ch <- sc.TorrentsPaused
+	ch <- sc.Downloaded
+	ch <- sc.Uploaded
+	ch <- sc.FilesAdded
+	ch <- sc.ActiveTime
+	ch <- sc.SessionCount
 }
 
 // Collect implements the prometheus.Collector interface
 func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
 	stats, err := sc.client.GetSessionStats()
 	if err != nil {
-		log.Printf("failed to get session stats: %v", err)
+		slog.Error("failed to get session stats", "error", err)
 		return
 	}
 
 	if stats == nil {
-		log.Println("got nil session stats from transmission")
+		slog.Warn("got nil session stats from transmission")
 		return
 	}
 

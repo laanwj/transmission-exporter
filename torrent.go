@@ -34,6 +34,8 @@ type (
 		Name               string        `json:"name"`
 		Status             int           `json:"status"`
 		Added              int           `json:"addedDate"`
+		ActivityDate       int           `json:"activityDate"`
+		DoneDate           int           `json:"doneDate"`
 		LeftUntilDone      int64         `json:"leftUntilDone"`
 		Eta                int           `json:"eta"`
 		UploadRatio        float64       `json:"uploadRatio"`
@@ -54,18 +56,18 @@ type (
 		PeersGettingFromUs int           `json:"peersGettingFromUs"`
 		PeersSendingToUs   int           `json:"peersSendingToUs"`
 		TotalSize          int           `json:"totalSize"`
+		SizeWhenDone       int64         `json:"sizeWhenDone"`
 		DownloadEver       int           `json:"downloadedEver"`
 		UploadedEver       int           `json:"uploadedEver"`
+		CorruptEver        int64         `json:"corruptEver"`
+		HaveValid          int64         `json:"haveValid"`
+		DesiredAvailable   int64         `json:"desiredAvailable"`
+		SecondsDownloading int64         `json:"secondsDownloading"`
+		SecondsSeeding     int64         `json:"secondsSeeding"`
+		QueuePosition      int           `json:"queuePosition"`
+		PieceCount         int           `json:"pieceCount"`
+		PieceSize          int           `json:"pieceSize"`
 	}
-
-	// ByID implements the sort Interface to sort by ID
-	ByID []Torrent
-	// ByName implements the sort Interface to sort by Name
-	ByName []Torrent
-	// ByDate implements the sort Interface to sort by Date
-	ByDate []Torrent
-	// ByRatio implements the sort Interface to sort by Ratio
-	ByRatio []Torrent
 
 	// File is a file contained inside a torrent
 	File struct {
@@ -132,18 +134,3 @@ type (
 	}
 )
 
-func (t ByID) Len() int           { return len(t) }
-func (t ByID) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t ByID) Less(i, j int) bool { return t[i].ID < t[j].ID }
-
-func (t ByName) Len() int           { return len(t) }
-func (t ByName) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t ByName) Less(i, j int) bool { return t[i].Name < t[j].Name }
-
-func (t ByDate) Len() int           { return len(t) }
-func (t ByDate) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t ByDate) Less(i, j int) bool { return t[i].Added < t[j].Added }
-
-func (t ByRatio) Len() int           { return len(t) }
-func (t ByRatio) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
-func (t ByRatio) Less(i, j int) bool { return t[i].UploadRatio < t[j].UploadRatio }
