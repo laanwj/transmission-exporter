@@ -113,6 +113,11 @@ func (sc *SessionStatsCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
+	if stats == nil {
+		log.Println("got nil session stats from transmission")
+		return
+	}
+
 	ch <- prometheus.MustNewConstMetric(
 		sc.DownloadSpeed,
 		prometheus.GaugeValue,

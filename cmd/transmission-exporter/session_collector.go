@@ -129,6 +129,11 @@ func (sc *SessionCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
+	if session == nil {
+		log.Println("got nil session from transmission")
+		return
+	}
+
 	ch <- prometheus.MustNewConstMetric(
 		sc.AltSpeedDown,
 		prometheus.GaugeValue,
@@ -146,10 +151,15 @@ func (sc *SessionCollector) Collect(ch chan<- prometheus.Metric) {
 		prometheus.GaugeValue,
 		float64(session.CacheSizeMB*1024*1024),
 	)
+
+	var freeSpace int64
+	if session.DownloadDirFreeSpace != nil {
+		freeSpace = *session.DownloadDirFreeSpace
+	}
 	ch <- prometheus.MustNewConstMetric(
 		sc.FreeSpace,
 		prometheus.GaugeValue,
-		float64(session.DownloadDirFreeSpace),
+		float64(freeSpace),
 		session.DownloadDir, session.IncompleteDir,
 	)
 	ch <- prometheus.MustNewConstMetric(

@@ -187,6 +187,11 @@ func (tc *TorrentCollector) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 
+	if torrents == nil {
+		log.Println("got nil torrents from transmission")
+		return
+	}
+
 	tc.cachedTorrentsLock.Lock()
 	var torrentsToUpdate []transmission.Torrent
 	for _, t := range torrents {
