@@ -1,75 +1,67 @@
-# Transmission Exporter for Prometheus [![Build Status](https://cloud.drone.io/api/badges/metalmatze/transmission-exporter/status.svg)](https://cloud.drone.io/metalmatze/transmission-exporter)
+# Transmission Exporter for Prometheus
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/metalmatze/transmission-exporter.svg?maxAge=604800)](https://hub.docker.com/r/metalmatze/transmission-exporter)
-[![Go Report Card](https://goreportcard.com/badge/github.com/metalmatze/transmission-exporter)](https://goreportcard.com/report/github.com/metalmatze/transmission-exporter)
+[![Build and Push](https://github.com/khayyamsaleem/transmission-exporter/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/khayyamsaleem/transmission-exporter/actions)
 
 Prometheus exporter for [Transmission](https://transmissionbt.com/) metrics, written in Go.
 
-# LOOKING FOR MAINTAINERS
-I don't use this exporter anymore and I'd be happy if others would want to take over and maintain it in the future!  
-Write me a DM via [Twitter](https://twitter.com/metalmatze)!
-
-### Installation
-
-    $ go get github.com/metalmatze/transmission-exporter
-
-### Configuration
-
-| ENV Variable | Description |
-|---|---|
-| `WEB_PATH` | Path for metrics, default: `/metrics` |
-| `WEB_ADDR` | Address for this exporter to run, default: `:19091` |
-| `TRANSMISSION_ADDR` | Transmission address to connect with, default: `http://localhost:9091` |
-| `TRANSMISSION_USERNAME` | Transmission username, no default |
-| `TRANSMISSION_PASSWORD` | Transmission password, no default |
+Fork of [metalmatze/transmission-exporter](https://github.com/metalmatze/transmission-exporter) with tracker labels, modernized logging, additional metrics, bug fixes, and a bundled Grafana dashboard.
 
 ### Docker
 
-    docker pull metalmatze/transmission-exporter
-    docker run -d -p 19091:19091 metalmatze/transmission-exporter
+```sh
+docker pull ghcr.io/khayyamsaleem/transmission-exporter:latest
+docker run -d -p 19091:19091 ghcr.io/khayyamsaleem/transmission-exporter
+```
 
-### Kubernetes (Prometheus)
+### Configuration
 
-A sample kubernetes manifest is available in [example/kubernetes](https://github.com/metalmatze/transmission-exporter/blob/master/examples/kubernetes/docker-compose.yml)
-
-Please run: `kubectl apply -f examples/kubernetes/transmission.yml`
-
-You should:
-* Attach the config and downloads volume
-* Configure the password for the exporter
-
-Your prometheus instance will start scraping the metrics automatically. (if configured with annotation based discovery). [more info](https://www.weave.works/docs/cloud/latest/tasks/monitor/configuration-k8s/)
+| ENV Variable | Description | Default |
+|---|---|---|
+| `WEB_PATH` | Path for metrics | `/metrics` |
+| `WEB_ADDR` | Exporter listen address | `:19091` |
+| `TRANSMISSION_ADDR` | Transmission RPC address | `http://localhost:9091` |
+| `TRANSMISSION_USERNAME` | Transmission username | |
+| `TRANSMISSION_PASSWORD` | Transmission password | |
 
 ### Docker Compose
 
-Example `docker-compose.yml` with Transmission also running in docker.
+```yaml
+transmission:
+  image: linuxserver/transmission
+  restart: always
+  ports:
+    - "127.0.0.1:9091:9091"
+    - "51413:51413"
+    - "51413:51413/udp"
+transmission-exporter:
+  image: ghcr.io/khayyamsaleem/transmission-exporter:latest
+  restart: always
+  ports:
+    - "127.0.0.1:19091:19091"
+  environment:
+    TRANSMISSION_ADDR: http://transmission:9091
+```
 
-    transmission:
-      image: linuxserver/transmission
-      restart: always
-      ports:
-        - "127.0.0.1:9091:9091"
-        - "51413:51413"
-        - "51413:51413/udp"
-    transmission-exporter:
-      image: metalmatze/transmission-exporter
-      restart: always
-      links:
-        - transmission
-      ports:
-        - "127.0.0.1:19091:19091"
-      environment:
-        TRANSMISSION_ADDR: http://transmission:9091
+### Grafana Dashboard
+
+A dashboard is included in [`dashboards/`](dashboards/). Import `dashboard.json` into Grafana.
+
+### Changes from upstream
+
+- Tracker label on all per-torrent metrics
+- Structured logging with `slog`
+- Nil pointer crash fixes
+- Multi-stage Dockerfile, published to GHCR
+- CI via GitHub Actions
+- Updated Grafana dashboard
 
 ### Development
 
-    make
+```sh
+cp .env.example .env  # configure Transmission connection
+make install           # build and install
+```
 
-For development we encourage you to use `make install` instead, it's faster.
-
-Now simply copy the `.env.example` to `.env`, like `cp .env.example .env` and set your preferences.
-Now you're good to go.
-
-### Original authors of the Transmission package  
-Tobias Blom (https://github.com/tubbebubbe/transmission)  
+### Original authors of the Transmission package
+Tobias Blom (https://github.com/tubbebubbe/transmission)
 Long Nguyen (https://github.com/longnguyen11288/go-transmission)

@@ -56,7 +56,7 @@
         "uid": "grafana"
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 24,
         "x": 0,
         "y": 0
@@ -81,7 +81,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 2
+        "y": 3
       },
       "id": 27,
       "title": "Session Overview",
@@ -124,9 +124,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 5,
+        "w": 4,
         "x": 0,
-        "y": 3
+        "y": 4
       },
       "id": 13,
       "maxDataPoints": 100,
@@ -208,9 +208,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 5,
-        "y": 3
+        "w": 4,
+        "x": 4,
+        "y": 8
       },
       "id": 6,
       "maxDataPoints": 100,
@@ -290,175 +290,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
+        "w": 4,
         "x": 8,
-        "y": 3
-      },
-      "id": 22,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum (increase(transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[1d]))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "1 day upload",
-      "type": "stat",
-      "description": "Upload volume over the last 24 hours."
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
-          },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 11,
-        "y": 3
-      },
-      "id": 23,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum (increase(transmission_session_stats_uploaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[7d]))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "7 days upload",
-      "type": "stat",
-      "description": "Upload volume over the last 7 days."
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "blue",
-            "mode": "fixed"
-          },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 14,
-        "y": 3
+        "y": 8
       },
       "id": 5,
       "maxDataPoints": 100,
@@ -529,9 +363,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 5,
-        "x": 19,
-        "y": 3
+        "w": 4,
+        "x": 0,
+        "y": 8
       },
       "id": 18,
       "options": {
@@ -610,10 +444,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
-        "w": 5,
-        "x": 0,
-        "y": 7
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 4
       },
       "id": 40,
       "options": {
@@ -676,10 +510,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
-        "w": 5,
-        "x": 5,
-        "y": 7
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 4
       },
       "id": 41,
       "options": {
@@ -746,10 +580,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
-        "w": 5,
-        "x": 10,
-        "y": 7
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 4
       },
       "id": 42,
       "options": {
@@ -827,9 +661,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 0,
-        "y": 9
+        "w": 4,
+        "x": 8,
+        "y": 4
       },
       "id": 10,
       "maxDataPoints": 100,
@@ -906,9 +740,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
-        "x": 3,
-        "y": 9
+        "w": 4,
+        "x": 4,
+        "y": 4
       },
       "id": 11,
       "maxDataPoints": 100,
@@ -985,9 +819,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 5,
-        "y": 9
+        "w": 4,
+        "x": 16,
+        "y": 8
       },
       "id": 3,
       "maxDataPoints": 100,
@@ -1067,175 +901,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 3,
-        "x": 8,
-        "y": 9
-      },
-      "id": 24,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum (increase(transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[1d]))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "1 day download",
-      "type": "stat",
-      "description": "Download volume over the last 24 hours."
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Download volume over the last 7 days.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "purple",
-            "mode": "fixed"
-          },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 11,
-        "y": 9
-      },
-      "id": 25,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.0.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "expr": "sum (increase(transmission_session_stats_downloaded_bytes{instance=~\"$instance\",job=~\"$job\",type=\"cumulative\"}[7d]))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "7 days download",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "purple",
-            "mode": "fixed"
-          },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 5,
-        "x": 14,
-        "y": 9
+        "w": 4,
+        "x": 20,
+        "y": 8
       },
       "id": 4,
       "maxDataPoints": 100,
@@ -1304,9 +972,9 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 5,
-        "x": 19,
-        "y": 9
+        "w": 4,
+        "x": 12,
+        "y": 8
       },
       "id": 21,
       "options": {
@@ -1409,7 +1077,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 12
       },
       "id": 14,
       "options": {
@@ -1949,6 +1617,86 @@
                 "value": 85
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Corrupt"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Valid"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 85
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last Active"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeFromNow"
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "DL Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Seed Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
           }
         ]
       },
@@ -1956,7 +1704,7 @@
         "h": 22,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 21
       },
       "id": 15,
       "options": {
@@ -2199,6 +1947,76 @@
           "legendFormat": "__auto",
           "range": false,
           "refId": "R"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max by (id, name) (transmission_torrent_corrupt_ever_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "S"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max by (id, name) (transmission_torrent_have_valid_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "T"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max by (id, name) (transmission_torrent_activity_date{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"} * 1000)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "U"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max by (id, name) (transmission_torrent_seconds_downloading{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "V"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max by (id, name) (transmission_torrent_seconds_seeding{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "W"
         }
       ],
       "title": "Torrent stats",
@@ -2418,7 +2236,12 @@
               "name 9": 57,
               "tracker 1": 33,
               "tracker 2": 38,
-              "tracker 3": 48
+              "tracker 3": 48,
+              "Value #S": 83,
+              "Value #T": 84,
+              "Value #U": 85,
+              "Value #V": 86,
+              "Value #W": 87
             },
             "renameByName": {
               "Time 2": "",
@@ -2441,7 +2264,12 @@
               "Value #O": "Error",
               "Value #P": "Queue",
               "Value #Q": "Done",
-              "Value #R": "Remaining"
+              "Value #R": "Remaining",
+              "Value #S": "Corrupt",
+              "Value #T": "Valid",
+              "Value #U": "Last Active",
+              "Value #V": "DL Time",
+              "Value #W": "Seed Time"
             }
           }
         },
@@ -2458,6 +2286,18 @@
                 "dateFormat": "$(UNIX)",
                 "destinationType": "time",
                 "targetField": "Done"
+              },
+              {
+                "targetField": "Value #U",
+                "destinationType": "time"
+              },
+              {
+                "targetField": "Value #V",
+                "destinationType": "number"
+              },
+              {
+                "targetField": "Value #W",
+                "destinationType": "number"
               }
             ],
             "fields": {}
@@ -2472,7 +2312,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 43
       },
       "id": 28,
       "panels": [
@@ -2871,7 +2711,7 @@
             "h": 22,
             "w": 24,
             "x": 0,
-            "y": 45
+            "y": 44
           },
           "id": 26,
           "options": {
@@ -3351,444 +3191,10 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 44
       },
       "id": 30,
       "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "description": "Detailed health view per torrent: error status, bytes remaining/valid/corrupt, queue position, last activity, completion date, and time spent downloading and seeding.",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "fixedColor": "text",
-                "mode": "fixed"
-              },
-              "custom": {
-                "align": "auto",
-                "cellOptions": {
-                  "type": "color-text"
-                },
-                "inspect": false
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "0": {
-                      "text": "OK",
-                      "color": "green",
-                      "index": 0
-                    },
-                    "1": {
-                      "text": "Tracker Warning",
-                      "color": "yellow",
-                      "index": 1
-                    },
-                    "2": {
-                      "text": "Tracker Error",
-                      "color": "orange",
-                      "index": 2
-                    },
-                    "3": {
-                      "text": "Local Error",
-                      "color": "red",
-                      "index": 3
-                    }
-                  },
-                  "type": "value"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "yellow",
-                    "value": 1
-                  },
-                  {
-                    "color": "orange",
-                    "value": 2
-                  },
-                  {
-                    "color": "red",
-                    "value": 3
-                  }
-                ]
-              }
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Error"
-                },
-                "properties": [
-                  {
-                    "id": "custom.cellOptions",
-                    "value": {
-                      "mode": "gradient",
-                      "type": "color-background"
-                    }
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 120
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Name"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 400
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Remaining"
-                },
-                "properties": [
-                  {
-                    "id": "unit",
-                    "value": "bytes"
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 100
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Corrupt"
-                },
-                "properties": [
-                  {
-                    "id": "unit",
-                    "value": "bytes"
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 100
-                  },
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Valid"
-                },
-                "properties": [
-                  {
-                    "id": "unit",
-                    "value": "bytes"
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 100
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Last Active"
-                },
-                "properties": [
-                  {
-                    "id": "unit",
-                    "value": "dateTimeFromNow"
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 110
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Done At"
-                },
-                "properties": [
-                  {
-                    "id": "unit",
-                    "value": "dateTimeFromNow"
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 110
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Queue"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 60
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 16,
-            "w": 24,
-            "x": 0,
-            "y": 46
-          },
-          "id": 35,
-          "options": {
-            "cellHeight": "sm",
-            "footer": {
-              "countRows": false,
-              "fields": "",
-              "reducer": [
-                "sum"
-              ],
-              "show": false
-            },
-            "showHeader": true,
-            "sortBy": [
-              {
-                "desc": false,
-                "displayName": "Queue"
-              }
-            ]
-          },
-          "pluginVersion": "12.0.2",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_error{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_left_until_done_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_corrupt_ever_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_have_valid_bytes{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "D"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_queue_position{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "E"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_activity_date{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"} * 1000)",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "F"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_done_date{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"} * 1000)",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "G"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_seconds_downloading{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "H"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
-              "editorMode": "code",
-              "exemplar": false,
-              "expr": "max by (id, name) (transmission_torrent_seconds_seeding{instance=~\"$instance\",job=~\"$job\",name=~\"$Torrent\"})",
-              "format": "table",
-              "instant": true,
-              "legendFormat": "__auto",
-              "range": false,
-              "refId": "I"
-            }
-          ],
-          "title": "Torrent health details",
-          "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "id",
-                "mode": "outer"
-              }
-            },
-            {
-              "id": "organize",
-              "options": {
-                "excludeByName": {
-                  "Time 1": true,
-                  "Time 2": true,
-                  "Time 3": true,
-                  "Time 4": true,
-                  "Time 5": true,
-                  "Time 6": true,
-                  "Time 7": true,
-                  "Time 8": true,
-                  "Time 9": true,
-                  "name 2": true,
-                  "name 3": true,
-                  "name 4": true,
-                  "name 5": true,
-                  "name 6": true,
-                  "name 7": true,
-                  "name 8": true,
-                  "name 9": true
-                },
-                "includeByName": {},
-                "indexByName": {
-                  "id": 0,
-                  "name 1": 1,
-                  "Value #E": 2,
-                  "Value #A": 3,
-                  "Value #B": 4,
-                  "Value #D": 5,
-                  "Value #C": 6,
-                  "Value #F": 7,
-                  "Value #G": 8,
-                  "Value #H": 9,
-                  "Value #I": 10
-                },
-                "renameByName": {
-                  "name 1": "Name",
-                  "Value #A": "Error",
-                  "Value #B": "Remaining",
-                  "Value #C": "Corrupt",
-                  "Value #D": "Valid",
-                  "Value #E": "Queue",
-                  "Value #F": "Last Active",
-                  "Value #G": "Done At",
-                  "Value #H": "Time DL (s)",
-                  "Value #I": "Time Seed (s)"
-                }
-              }
-            },
-            {
-              "id": "convertFieldType",
-              "options": {
-                "conversions": [
-                  {
-                    "dateFormat": "$(UNIX)",
-                    "destinationType": "time",
-                    "targetField": "Last Active"
-                  },
-                  {
-                    "dateFormat": "$(UNIX)",
-                    "destinationType": "time",
-                    "targetField": "Done At"
-                  }
-                ],
-                "fields": {}
-              }
-            }
-          ],
-          "type": "table"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -3853,7 +3259,7 @@
             "h": 9,
             "w": 12,
             "x": 0,
-            "y": 62
+            "y": 45
           },
           "id": 36,
           "options": {
@@ -3955,7 +3361,7 @@
             "h": 9,
             "w": 12,
             "x": 12,
-            "y": 62
+            "y": 45
           },
           "id": 37,
           "options": {
@@ -4023,7 +3429,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 71
+            "y": 54
           },
           "id": 38,
           "options": {
