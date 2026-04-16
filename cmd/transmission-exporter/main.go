@@ -41,7 +41,11 @@ func main() {
 		}
 	}
 
-	client := transmission.New(addr, user)
+	client, err := transmission.New(addr, user)
+	if err != nil {
+		slog.Error("invalid TRANSMISSION_ADDR", "addr", addr, "error", err)
+		os.Exit(1)
+	}
 
 	prometheus.MustRegister(NewTorrentCollector(client))
 	prometheus.MustRegister(NewSessionCollector(client))

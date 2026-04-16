@@ -19,7 +19,7 @@ docker run -d -p 19091:19091 ghcr.io/khayyamsaleem/transmission-exporter
 |---|---|---|
 | `WEB_PATH` | Path for metrics | `/metrics` |
 | `WEB_ADDR` | Exporter listen address | `:19091` |
-| `TRANSMISSION_ADDR` | Transmission RPC address | `http://localhost:9091` |
+| `TRANSMISSION_ADDR` | Transmission RPC address. Accepts `http://host:port`, `https://host:port`, or `unix:///path/to/socket` for connecting over a UNIX domain socket. | `http://localhost:9091` |
 | `TRANSMISSION_USERNAME` | Transmission username | |
 | `TRANSMISSION_PASSWORD` | Transmission password | |
 
@@ -54,6 +54,7 @@ A dashboard is included in [`dashboards/`](dashboards/). Import `dashboard.json`
 - Multi-stage Dockerfile, published to GHCR
 - CI via GitHub Actions
 - Updated Grafana dashboard
+- UNIX socket support via `unix://` scheme on `TRANSMISSION_ADDR`
 
 ### Development
 

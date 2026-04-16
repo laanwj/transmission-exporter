@@ -2,10 +2,14 @@ package transmission
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
+	"net"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -27,12 +31,43 @@ type (
 	}
 )
 
-// New create new transmission torrent
-func New(url string, user *User) *Client {
-	return &Client{
-		URL:  url + endpoint,
-		User: user,
+// New creates a new transmission client.  addr is either an http(s) URL
+// (e.g. "http://localhost:9091") or a unix:// URL pointing at a socket
+// (e.g. "unix:///run/transmission/rpc.sock"), in which case all RPC
+// traffic is tunneled over the socket.  A bare "host:port" without a
+// scheme is treated as http for backwards compatibility.
+func New(addr string, user *User) (*Client, error) {
+	u, err := url.Parse(addr)
+	if err != nil {
+		return nil, fmt.Errorf("parse transmission address: %w", err)
 	}
+
+	c := &Client{User: user}
+
+	switch u.Scheme {
+	case "unix":
+		if u.Path == "" {
+			return nil, errors.New("unix transmission address must include a socket path, e.g. unix:///run/transmission/rpc.sock")
+		}
+		socketPath := u.Path
+		c.client = http.Client{
+			Transport: &http.Transport{
+				DialContext: func(ctx context.Context, _, _ string) (net.Conn, error) {
+					var d net.Dialer
+					return d.DialContext(ctx, "unix", socketPath)
+				},
+			},
+		}
+		// The request URL still needs a host for net/http to accept it;
+		// "unix" is a placeholder and is never used for routing.
+		c.URL = "http://unix" + endpoint
+	case "http", "https", "":
+		c.URL = addr + endpoint
+	default:
+		return nil, fmt.Errorf("unsupported transmission address scheme %q (want http, https, or unix)", u.Scheme)
+	}
+
+	return c, nil
 }
 
 func (c *Client) post(body []byte) ([]byte, error) {

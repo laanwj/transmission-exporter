@@ -178,7 +178,10 @@ func mockTransmissionServer(t *testing.T) *httptest.Server {
 func newTestClient(t *testing.T) (*transmission.Client, *httptest.Server) {
 	t.Helper()
 	srv := mockTransmissionServer(t)
-	client := transmission.New(srv.URL, nil)
+	client, err := transmission.New(srv.URL, nil)
+	if err != nil {
+		t.Fatalf("transmission.New: %v", err)
+	}
 	return client, srv
 }
 
@@ -370,7 +373,10 @@ func TestTorrentCollectorErrorHandling(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	client := transmission.New(srv.URL, nil)
+	client, err := transmission.New(srv.URL, nil)
+	if err != nil {
+		t.Fatalf("transmission.New: %v", err)
+	}
 	collector := NewTorrentCollector(client)
 
 	// Should not panic on error
@@ -397,7 +403,10 @@ func TestTorrentCollectorNilResponse(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	client := transmission.New(srv.URL, nil)
+	client, err := transmission.New(srv.URL, nil)
+	if err != nil {
+		t.Fatalf("transmission.New: %v", err)
+	}
 	collector := NewTorrentCollector(client)
 
 	ch := make(chan prometheus.Metric, 100)
@@ -472,7 +481,10 @@ func TestTorrentCachePruning(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	client := transmission.New(srv.URL, nil)
+	client, err := transmission.New(srv.URL, nil)
+	if err != nil {
+		t.Fatalf("transmission.New: %v", err)
+	}
 	collector := NewTorrentCollector(client)
 
 	collectMetricCount := func() int {
@@ -576,7 +588,10 @@ func TestTrackerStatsAggregation(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	client := transmission.New(srv.URL, nil)
+	client, err := transmission.New(srv.URL, nil)
+	if err != nil {
+		t.Fatalf("transmission.New: %v", err)
+	}
 	collector := NewTorrentCollector(client)
 
 	// The two tracker stats for the same host should be aggregated
